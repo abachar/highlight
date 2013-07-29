@@ -1,0 +1,88 @@
+grammar Json;
+
+@header {
+    import fr.abachar.highlight.fragment.Fragment;
+    import fr.abachar.highlight.fragment.Type;
+    import java.util.List;
+    import java.util.ArrayList;
+}
+
+@members {
+    private List<Fragment> fragments = new ArrayList<Fragment>();
+    private void addFragment(Type type, Token start) {
+        fragments.add(new Fragment(type, start.getStartIndex(), start.getStopIndex()));
+    }
+    public List<Fragment> getFragments() {
+        return fragments;
+    }
+}
+
+//
+// PARSER RULES
+//
+parse
+	: object
+	| array
+	;
+
+object
+	: LBRACE (element (COMMA element)*)? RBRACE
+	;
+
+element
+	: name COLON value
+	;
+
+array
+	: LBRACKET value (COMMA value)* RBRACKET
+	;
+
+name
+@after { addFragment(Type.NAME, $start); }
+    : STRING
+;
+
+value
+	: object
+ 	| array
+  	| STRING   { addFragment(Type.STRING, $start); }
+	| INTEGER  { addFragment(Type.NUMBER, $start); }
+	| DOUBLE   { addFragment(Type.NUMBER, $start); }
+	| literal
+	;
+
+literal
+@after { addFragment(Type.KEYWORD, $start); }
+	: TRUE
+	| FALSE
+	| NULL
+    ;
+
+//
+// LEXER RULES
+//
+COLON   : ':';
+COMMA   : ',';
+LBRACE  : '{';
+RBRACE  : '}';
+LBRACKET: '[';
+RBRACKET: ']';
+TRUE    :  'true';
+FALSE   : 'false';
+NULL    : 'null';
+
+fragment DOT         : '.';
+fragment DIGIT       : '0' .. '9';
+fragment HEX_DIGIT   : ('0' .. '9' | 'A' .. 'F' | 'a' .. 'f');
+fragment UNICODE_CHAR: ~('"'| '\\');
+fragment STRING_CHAR :  UNICODE_CHAR | ESC_SEQ;
+fragment ESC_SEQ     : '\\' ('\"' | '\\' | '/' | 'b' | 'f' | 'n' | 'r' | 't' | 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT);
+fragment INT         : '-'? ('0' | '1'..'9' DIGIT*);
+fragment FRAC        : DOT DIGIT+;
+fragment EXP         : ('e' | 'E') ('+' | '-')? DIGIT+;
+
+WS: (' ' | '\r' | '\t' | '\u000C' | '\n' ) -> channel(HIDDEN);
+
+STRING : '"' STRING_CHAR* '"';
+INTEGER: INT;
+DOUBLE : INT (FRAC EXP? | EXP);
