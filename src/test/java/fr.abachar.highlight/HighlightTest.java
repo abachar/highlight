@@ -20,7 +20,7 @@ public class HighlightTest {
     @Test
     public void test() throws IOException {
         // Get test source file
-        String source = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("sample.css"));
+        String source = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("sample.css.txt"));
         String output = "";
 
         //

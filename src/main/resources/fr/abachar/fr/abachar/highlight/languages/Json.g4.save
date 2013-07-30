@@ -1,27 +1,13 @@
 grammar Json;
 
-@header {
-    import fr.abachar.highlight.fragment.Fragment;
-    import fr.abachar.highlight.fragment.Type;
-    import java.util.List;
-    import java.util.ArrayList;
-}
-
-@members {
-    private List<Fragment> fragments = new ArrayList<Fragment>();
-    private void addFragment(Type type, Token start) {
-        fragments.add(new Fragment(type, start.getStartIndex(), start.getStopIndex()));
-    }
-    public List<Fragment> getFragments() {
-        return fragments;
-    }
-}
-
 //
 // PARSER RULES
 //
 parse
-	: object
+    : root
+
+root
+    : object
 	| array
 	;
 
@@ -70,7 +56,12 @@ RBRACKET: ']';
 TRUE    :  'true';
 FALSE   : 'false';
 NULL    : 'null';
+WS      : (' ' | '\r' | '\t' | '\u000C' | '\n' ) -> channel(HIDDEN);
+STRING  : '"' STRING_CHAR* '"';
+INTEGER : INT;
+DOUBLE  : INT (FRAC EXP? | EXP);
 
+// Fragment
 fragment DOT         : '.';
 fragment DIGIT       : '0' .. '9';
 fragment HEX_DIGIT   : ('0' .. '9' | 'A' .. 'F' | 'a' .. 'f');
@@ -81,8 +72,3 @@ fragment INT         : '-'? ('0' | '1'..'9' DIGIT*);
 fragment FRAC        : DOT DIGIT+;
 fragment EXP         : ('e' | 'E') ('+' | '-')? DIGIT+;
 
-WS: (' ' | '\r' | '\t' | '\u000C' | '\n' ) -> channel(HIDDEN);
-
-STRING : '"' STRING_CHAR* '"';
-INTEGER: INT;
-DOUBLE : INT (FRAC EXP? | EXP);

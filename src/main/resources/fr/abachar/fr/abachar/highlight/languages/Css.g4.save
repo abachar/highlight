@@ -1,18 +1,42 @@
 grammar Css;
 
-tokens {
-    STRING
-}
+//
+// PARSER RULES
+//
+parse
+    : root
+    ;
 
-@members {
-    private List<Fragment> fragments = new ArrayList<Fragment>();
-    private void addFragment(Type type, Token start) {
-        fragments.add(new Fragment(type, start.getStartIndex(), start.getStopIndex()));
-    }
-    public List<Fragment> getFragments() {
-        return fragments;
-    }
-}
+root
+    : basics
+    | block             // rule /{/, 'Punctuation', :stanza
+    | decorator         // rule /:#{identifier}/, 'Name.Decorator'
+    | class_selector    // rule /\.#{identifier}/, 'Name.Class'
+    | hash_selector     // rule /##{identifier}/, 'Name.Function'
+    | at_keyword        // rule /@#{identifier}/, 'Keyword', :at_rule
+    | identifier        // rule identifier, 'Name.Tag'
+    | operator          // rule %r([~^*!%&\[\]()<>|+=@:;,./?-]), 'Operator'
+    ;
+
+at_keyword
+    : // rule /{(?=\s*#{identifier}\s*:)/m, 'Punctuation', :at_stanza
+        
+        // rule /{/, 'Punctuation', :at_body
+        // rule /;/, 'Punctuation', :pop!
+        // mixin :value
+
+
+basics
+    : TEXT              // rule /\s+/m, 'Text'
+    | COMMENT           // rule %r(/\*(?:.*?)\*/)m, 'Comment'
+    ;
+
+stanza:
+
+
+
+/**
+
 
 //
 // PARSER RULES
@@ -187,7 +211,7 @@ comment
 // LEXER RULES
 //
 BOM:            '\uFEFF';
-IDENT:          Ident;
+IDENTIFIER:          Identifier;
 HASH:           '#' Name;
 CHARSET:        '@charset ';
 IMPORT:         '@' I M P O R T;
@@ -233,7 +257,7 @@ RBRACE:         '}';
 TILDE:          '~';
 MATCH:          [!#$%&*+./:=?@^|~-]? '=';
 WS:             [ \t\r\n\f]+;
-COMMENT:        '/*' .*? '*/';
+COMMENT:        '/*' .*? '* /';
 DELIM:          .;
 
 fragment Hex: [0-9a-fA-F];
@@ -272,3 +296,5 @@ fragment W: [wW];
 fragment X: [xX];
 fragment Y: [yY];
 fragment Z: [zZ];
+
+*/

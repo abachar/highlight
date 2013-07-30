@@ -1,31 +1,77 @@
 lexer grammar CssLexer;
 
 options {
-    superClass = HighlightLexer;
+    superClass = fr.abachar.highlight.antlr.HighlightLexer;
 }
 
 tokens {
     KEYWORD, ATTRIBUTE, OPERATOR
 }
 
-@header {
-    import fr.abachar.highlight.antlr.HighlightLexer;
-}
-
 @members {
     public static final String[] ATTRIBUTES = {"ALIGN-CONTENT", "ALIGN-ITEMS", "ALIGN-SELF", "ALIGNMENT-ADJUST", "ALIGNMENT-BASELINE", "ALL", "ANCHOR-POINT", "ANIMATION", "ANIMATION-DELAY", "ANIMATION-DIRECTION", "ANIMATION-DURATION", "ANIMATION-FILL-MODE", "ANIMATION-ITERATION-COUNT", "ANIMATION-NAME", "ANIMATION-PLAY-STATE", "ANIMATION-TIMING-FUNCTION", "APPEARANCE", "AZIMUTH", "BACKFACE-VISIBILITY", "BACKGROUND", "BACKGROUND-ATTACHMENT", "BACKGROUND-CLIP", "BACKGROUND-COLOR", "BACKGROUND-IMAGE", "BACKGROUND-ORIGIN", "BACKGROUND-POSITION", "BACKGROUND-REPEAT", "BACKGROUND-SIZE", "BASELINE-SHIFT", "BINDING", "BLEED", "BOOKMARK-LABEL", "BOOKMARK-LEVEL", "BOOKMARK-STATE", "BOOKMARK-TARGET", "BORDER", "BORDER-BOTTOM", "BORDER-BOTTOM-COLOR", "BORDER-BOTTOM-LEFT-RADIUS", "BORDER-BOTTOM-RIGHT-RADIUS", "BORDER-BOTTOM-STYLE", "BORDER-BOTTOM-WIDTH", "BORDER-COLLAPSE", "BORDER-COLOR", "BORDER-IMAGE", "BORDER-IMAGE-OUTSET", "BORDER-IMAGE-REPEAT", "BORDER-IMAGE-SLICE", "BORDER-IMAGE-SOURCE", "BORDER-IMAGE-WIDTH", "BORDER-LEFT", "BORDER-LEFT-COLOR", "BORDER-LEFT-STYLE", "BORDER-LEFT-WIDTH", "BORDER-RADIUS", "BORDER-RIGHT", "BORDER-RIGHT-COLOR", "BORDER-RIGHT-STYLE", "BORDER-RIGHT-WIDTH", "BORDER-SPACING", "BORDER-STYLE", "BORDER-TOP", "BORDER-TOP-COLOR", "BORDER-TOP-LEFT-RADIUS", "BORDER-TOP-RIGHT-RADIUS", "BORDER-TOP-STYLE", "BORDER-TOP-WIDTH", "BORDER-WIDTH", "BOTTOM", "BOX-ALIGN", "BOX-DECORATION-BREAK", "BOX-DIRECTION", "BOX-FLEX", "BOX-FLEX-GROUP", "BOX-LINES", "BOX-ORDINAL-GROUP", "BOX-ORIENT", "BOX-PACK", "BOX-SHADOW", "BOX-SIZING", "BREAK-AFTER", "BREAK-BEFORE", "BREAK-INSIDE", "CAPTION-SIDE", "CLEAR", "CLIP", "CLIP-PATH", "CLIP-RULE", "COLOR", "COLOR-PROFILE", "COLUMN-COUNT", "COLUMN-FILL", "COLUMN-GAP", "COLUMN-RULE", "COLUMN-RULE-COLOR", "COLUMN-RULE-STYLE", "COLUMN-RULE-WIDTH", "COLUMN-SPAN", "COLUMN-WIDTH", "COLUMNS", "CONTENT", "COUNTER-INCREMENT", "COUNTER-RESET", "CROP", "CUE", "CUE-AFTER", "CUE-BEFORE", "CURSOR", "DIRECTION", "DISPLAY", "DOMINANT-BASELINE", "DROP-INITIAL-AFTER-ADJUST", "DROP-INITIAL-AFTER-ALIGN", "DROP-INITIAL-BEFORE-ADJUST", "DROP-INITIAL-BEFORE-ALIGN", "DROP-INITIAL-SIZE", "DROP-INITIAL-VALUE", "ELEVATION", "EMPTY-CELLS", "FILTER", "FIT", "FIT-POSITION", "FLEX", "FLEX-BASIS", "FLEX-DIRECTION", "FLEX-FLOW", "FLEX-GROW", "FLEX-SHRINK", "FLEX-WRAP", "FLOAT", "FLOAT-OFFSET", "FONT", "FONT-FAMILY", "FONT-FEATURE-SETTINGS", "FONT-KERNING", "FONT-LANGUAGE-OVERRIDE", "FONT-SIZE", "FONT-SIZE-ADJUST", "FONT-STRETCH", "FONT-STYLE", "FONT-SYNTHESIS", "FONT-VARIANT", "FONT-VARIANT-ALTERNATES", "FONT-VARIANT-CAPS", "FONT-VARIANT-EAST-ASIAN", "FONT-VARIANT-LIGATURES", "FONT-VARIANT-NUMERIC", "FONT-VARIANT-POSITION", "FONT-WEIGHT", "GRID-CELL", "GRID-COLUMN", "GRID-COLUMN-ALIGN", "GRID-COLUMN-SIZING", "GRID-COLUMN-SPAN", "GRID-COLUMNS", "GRID-FLOW", "GRID-ROW", "GRID-ROW-ALIGN", "GRID-ROW-SIZING", "GRID-ROW-SPAN", "GRID-ROWS", "GRID-TEMPLATE", "HANGING-PUNCTUATION", "HEIGHT", "HYPHENATE-AFTER", "HYPHENATE-BEFORE", "HYPHENATE-CHARACTER", "HYPHENATE-LINES", "HYPHENATE-RESOURCE", "HYPHENS", "ICON", "IMAGE-ORIENTATION", "IMAGE-RENDERING", "IMAGE-RESOLUTION", "IME-MODE", "INLINE-BOX-ALIGN", "JUSTIFY-CONTENT", "LEFT", "LETTER-SPACING", "LINE-BREAK", "LINE-HEIGHT", "LINE-STACKING", "LINE-STACKING-RUBY", "LINE-STACKING-SHIFT", "LINE-STACKING-STRATEGY", "LIST-STYLE", "LIST-STYLE-IMAGE", "LIST-STYLE-POSITION", "LIST-STYLE-TYPE", "MARGIN", "MARGIN-BOTTOM", "MARGIN-LEFT", "MARGIN-RIGHT", "MARGIN-TOP", "MARK", "MARK-AFTER", "MARK-BEFORE", "MARKER-OFFSET", "MARKS", "MARQUEE-DIRECTION", "MARQUEE-LOOP", "MARQUEE-PLAY-COUNT", "MARQUEE-SPEED", "MARQUEE-STYLE", "MASK", "MAX-HEIGHT", "MAX-WIDTH", "MIN-HEIGHT", "MIN-WIDTH", "MOVE-TO", "NAV-DOWN", "NAV-INDEX", "NAV-LEFT", "NAV-RIGHT", "NAV-UP", "OBJECT-FIT", "OBJECT-POSITION", "OPACITY", "ORDER", "ORPHANS", "OUTLINE", "OUTLINE-COLOR", "OUTLINE-OFFSET", "OUTLINE-STYLE", "OUTLINE-WIDTH", "OVERFLOW", "OVERFLOW-STYLE", "OVERFLOW-WRAP", "OVERFLOW-X", "OVERFLOW-Y", "PADDING", "PADDING-BOTTOM", "PADDING-LEFT", "PADDING-RIGHT", "PADDING-TOP", "PAGE", "PAGE-BREAK-AFTER", "PAGE-BREAK-BEFORE", "PAGE-BREAK-INSIDE", "PAGE-POLICY", "PAUSE", "PAUSE-AFTER", "PAUSE-BEFORE", "PERSPECTIVE", "PERSPECTIVE-ORIGIN", "PHONEMES", "PITCH", "PITCH-RANGE", "PLAY-DURING", "POINTER-EVENTS", "POSITION", "PRESENTATION-LEVEL", "PUNCTUATION-TRIM", "QUOTES", "RENDERING-INTENT", "RESIZE", "REST", "REST-AFTER", "REST-BEFORE", "RICHNESS", "RIGHT", "ROTATION", "ROTATION-POINT", "RUBY-ALIGN", "RUBY-OVERHANG", "RUBY-POSITION", "RUBY-SPAN", "SIZE", "SPEAK", "SPEAK-AS", "SPEAK-HEADER", "SPEAK-NUMERAL", "SPEAK-PUNCTUATION", "SPEECH-RATE", "SRC", "STRESS", "STRING-SET", "TAB-SIZE", "TABLE-LAYOUT", "TARGET", "TARGET-NAME", "TARGET-NEW", "TARGET-POSITION", "TEXT-ALIGN", "TEXT-ALIGN-LAST", "TEXT-COMBINE-HORIZONTAL", "TEXT-DECORATION", "TEXT-DECORATION-COLOR", "TEXT-DECORATION-LINE", "TEXT-DECORATION-SKIP", "TEXT-DECORATION-STYLE", "TEXT-EMPHASIS", "TEXT-EMPHASIS-COLOR", "TEXT-EMPHASIS-POSITION", "TEXT-EMPHASIS-STYLE", "TEXT-HEIGHT", "TEXT-INDENT", "TEXT-JUSTIFY", "TEXT-ORIENTATION", "TEXT-OUTLINE", "TEXT-OVERFLOW", "TEXT-RENDERING", "TEXT-SHADOW", "TEXT-SPACE-COLLAPSE", "TEXT-TRANSFORM", "TEXT-UNDERLINE-POSITION", "TEXT-WRAP", "TOP", "TRANSFORM", "TRANSFORM-ORIGIN", "TRANSFORM-STYLE", "TRANSITION", "TRANSITION-DELAY", "TRANSITION-DURATION", "TRANSITION-PROPERTY", "TRANSITION-TIMING-FUNCTION", "UNICODE-BIDI", "VERTICAL-ALIGN", "VISIBILITY", "VOICE-BALANCE", "VOICE-DURATION", "VOICE-FAMILY", "VOICE-PITCH", "VOICE-PITCH-RANGE", "VOICE-RANGE", "VOICE-RATE", "VOICE-STRESS", "VOICE-VOLUME", "VOLUME", "WHITE-SPACE", "WIDOWS", "WIDTH", "WORD-BREAK", "WORD-SPACING", "WORD-WRAP", "WRITING-MODE", "Z-INDEX"};
 
-    public boolean isCaseSensitive() {  return false; }
+    public boolean isCaseSensitive() {
+        return false;
+    }
 }
 
+
+
+
+
+
+
+
+
+
+/**
 //
 // Default "mode"
 //
+LBRACE          :  '{'                -> pushMode(STANZA);
+DECORATOR       : ':' Identifier;
+CLASS           : '.' Identifier;
+HASH            : '#' Identifier;
+AT_KEYWORD      : '@' Identifier     -> pushMode(AT_RULE);
+IDENTIFIER      : Identifier;
+OPERATOR        : [~^*!%&\[\]()<>|+=@:;,./?-];
+// Basics
+TEXT            : .+;
+COMMENT         : '/*' .*? '* /';
 
-LBRACE:         '{' -> pushMode(BLOCK);
+//
+// AT_RULE
+//
+mode AT_RULE;
+rule /{(?=\s*#{identifier}\s*:)/m, 'Punctuation', :at_stanza
+AT_RULE_LBRACE    : '{'               -> type(PUNCTUATION); pushMode(AT_RULE_BODY);
+AT_RULE_SEMICOLON : ';'           -> type(PUNCTUATION); popMode;
+mixin :value
+
+mode VALUE
+
+
+RBRACE            : '}'     -> popMode;
+BLOCK_DECLARATION : BLOCK_PROPERTY BLOCK_COLON BLOCK_VALUE BLOCK_SEMICOLON;
+BLOCK_PROPERTY    : Name       { setType(isIdentifierInList(getText(), ATTRIBUTES) ? KEYWORD : ATTRIBUTE); };
+BLOCK_COLON       : Colon     -> type(OPERATOR);
+BLOCK_VALUE       : String | Num | Num '%';
+BLOCK_SEMICOLON   : ';'     -> type(OPERATOR);
+BLOCK_WS          : [ \t\r\n\f]+;
+
+
+rule /{(?=\s*#{identifier}\s*:)/m, 'Punctuation', :at_stanza
+rule /{/, 'Punctuation', :at_body
+rule /;/, 'Punctuation', :pop!
+
+
+// mixin :value
+
+
 
 BOM:            '\uFEFF';
-IDENT:          Ident;
+IDENT:          Identifier;
 HASH:           '#' Name;
 CHARSET:        '@charset ';
 IMPORT:         '@IMPORT';
@@ -34,18 +80,18 @@ MEDIA:          '@' M E D I A;
 PAGE:           '@' P A G E;
 KEYFRAMES:      '@' K E Y F R A M E S;
 LEGACY_SUPPORT: '@-' W L I T E '-' L E G A C Y '-' S U P P O R T;
-ATKEYWORD:      '@' Ident;
+ATKEYWORD:      '@' Identifier;
 MS_EXPR_FUNC:   E X P R E S S I O N Group;
 NOT_FUNC:       N O T '(';
 AND:            A N D;
 NOT:            N O T;
 ONLY:           O N L Y;
-FUNCTION:       Ident '(';
-PRIO:           '!' Ident;
+FUNCTION:       Identifier '(';
+PRIO:           '!' Identifier;
 STRING:         String;
 NUMBER:         Num;
 PERCENTAGE:     Num '%';
-DIMENSION:      Num Ident;
+DIMENSION:      Num Identifier;
 URL_FUNC:       U R L '(' WS* ( String | Url )? WS* ')';
 UNICODE_RANGE:  U '+' Hex Hex? Hex? Hex? Hex? Hex? ( '-' Hex Hex? Hex? Hex? Hex? Hex? )?;
 CDO:            '<!--';
@@ -69,7 +115,7 @@ VBAR:           '|';
 TILDE:          '~';
 MATCH:          [!#$%&*+./:=?@^|~-]? '=';
 WS:             [ \t\r\n\f]+;
-COMMENT:        '/*' .*? '*/';
+
 DELIM:          .;
 
 
@@ -85,6 +131,9 @@ BLOCK_VALUE       : String | Num | Num '%';
 BLOCK_SEMICOLON   : ';'     -> type(OPERATOR);
 BLOCK_WS          : [ \t\r\n\f]+;
 
+*/
+
+
 //
 // FRAGMENTS
 //
@@ -95,33 +144,11 @@ fragment Unicode: '\\' Hex Hex? Hex? Hex? Hex? Hex? ( '\r\n' | [ \t\r\n\f] )?;
 fragment Escape: Unicode | '\\' ~[\n\r\f0-9a-fA-F];
 fragment NmStart: '-'? ( [_a-zA-Z] | NonAscii | Escape );
 fragment NmChar: ( [_a-zA-Z0-9-] | NonAscii | Escape );
-fragment Ident: NmStart NmChar*;
+fragment Identifier: NmStart NmChar*;
 fragment Name: NmChar+;
 fragment Num: [+-]? ( [0-9]+ | [0-9]* '.' [0-9]+ );
 fragment String: '"' ( ~[\n\r\f\\"] | '\\' ( '\r\n' | [\r\n\f] ) | Escape )* '"' | '\'' ( ~[\n\r\f\\'] | '\\' ( '\r\n' | [\r\n\f] ) | Escape )* '\'';
 fragment Url: ( [!#$%&*-\[\]-~] | NonAscii | Escape )+;
 fragment Group: '(' ( Group | ~'('+ )* ')';
 
-fragment A: [aA];
-fragment B: [bB];
-fragment C: [cC];
-fragment D: [dD];
-fragment E: [eE];
-fragment F: [fF];
-fragment G: [gG];
-fragment H: [hH];
-fragment I: [iI];
-fragment K: [kK];
-fragment L: [lL];
-fragment M: [mM];
-fragment N: [nN];
-fragment O: [oO];
-fragment P: [pP];
-fragment R: [rR];
-fragment S: [sS];
-fragment T: [tT];
-fragment U: [uU];
-fragment W: [wW];
-fragment X: [xX];
-fragment Y: [yY];
-fragment Z: [zZ];
+
