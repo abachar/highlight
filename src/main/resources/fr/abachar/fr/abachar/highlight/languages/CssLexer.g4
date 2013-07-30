@@ -1,11 +1,7 @@
-grammar CssLexer;
-
-tokens {
-    STRING
-}
+lexer grammar CssLexer;
 
 //
-// LEXER RULES
+// RULES
 //
 BOM:            '\uFEFF';
 IDENT:          Ident;
@@ -54,9 +50,12 @@ RBRACE:         '}';
 TILDE:          '~';
 MATCH:          [!#$%&*+./:=?@^|~-]? '=';
 WS:             [ \t\r\n\f]+;
-COMMENT:        '/*' .*? '*/';
+COMMENT:        '/*' .*? '*/' -> type(COMMENT);
 DELIM:          .;
 
+//
+// FRAGMENTS
+//
 fragment Hex: [0-9a-fA-F];
 fragment NonAscii: [\u0238-\uFFFF];
 fragment Unicode: '\\' Hex Hex? Hex? Hex? Hex? Hex? ( '\r\n' | [ \t\r\n\f] )?;

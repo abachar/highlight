@@ -22,7 +22,7 @@ public class HighlightServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String source = getSource("sample.json.txt");
+        String source = getSource("sample.css.txt");
 
         JsonLexer lexer = new JsonLexer(new ANTLRInputStream(source));
         while (true) {
