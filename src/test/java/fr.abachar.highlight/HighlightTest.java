@@ -1,13 +1,16 @@
 package fr.abachar.highlight;
 
 import fr.abachar.fr.abachar.highlight.languages.CssLexer;
+import fr.abachar.highlight.antlr.ANTLRNoCaseInputStream;
+import fr.abachar.highlight.antlr.HighlightLexer;
+import fr.abachar.highlight.fragment.Fragment;
 import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.Token;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author abachar
@@ -21,24 +24,16 @@ public class HighlightTest {
         String output = "";
 
         //
-        CssLexer lexer = new CssLexer(new ANTLRInputStream(source));
-        while (true) {
-            Token token = lexer.nextToken();
-            if (token.getType() == Token.EOF) {
-                break;
-            }
+        HighlightLexer lexer = new CssLexer(null);
+        if (lexer.isCaseSensitive()) {
+            lexer.setInputStream(new ANTLRInputStream(source));
+        } else {
+            lexer.setInputStream(new ANTLRNoCaseInputStream(source));
+        }
 
-            switch (token.getType()) {
-                case CssLexer.COMMENT:
-                    output += "<span class=\"c\">" + token.getText() + "</span>";
-                    break;
-
-                default:
-                    output += token.getText();
-                    break;
-            }
-
-            System.out.println("Token: (" + token.getType() + ") " + token.getText());
+        List<Fragment> fragments = lexer.run();
+        for (Fragment fragment : fragments) {
+            output += "<span class=\"" + fragment.getType().getCssClass() + "\">" + fragment.getText() + "</span>";
         }
 
         output = output.replace("\r\n", "\n");
@@ -54,13 +49,14 @@ public class HighlightTest {
         sbHtml.append("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
         sbHtml.append("  <head>");
         sbHtml.append("    <style>");
-        sbHtml.append("      .highlight { font: 12px Monospace; }");
-        sbHtml.append("      .c { color: #999; }");  /* Comment */
-        sbHtml.append("      .o { color: #555555 }"); /* Operator */
-        sbHtml.append("      .k { color: #006699; }"); /* Keyword */
-        sbHtml.append("      .n { color: #CC00FF }"); /* Name */
-        sbHtml.append("      .m { color: #FF6600 }"); /* Literal Number */
-        sbHtml.append("      .s { color: #d44950 }"); /* Literal String */
+        sbHtml.append("      .highlight { font: 12px Monospace;}");
+        sbHtml.append("      .c { color: #999988 }"); /* Comment */
+        sbHtml.append("      .o { color: #000000 }"); /* Operator */
+        sbHtml.append("      .k { color: #006699 }"); /* Keyword */
+        sbHtml.append("      .n { color: #008080 }"); /* Name */
+        sbHtml.append("      .m { color: #009999 }"); /* Literal Number */
+        sbHtml.append("      .s { color: #fdf1f4 }"); /* Literal String */
+        sbHtml.append("      .t { color: #000000 }"); /* Text */
         sbHtml.append("    </style>");
         sbHtml.append("  </head>");
         sbHtml.append("  <body>");

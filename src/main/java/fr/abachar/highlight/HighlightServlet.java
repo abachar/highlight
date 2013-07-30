@@ -1,9 +1,6 @@
 package fr.abachar.highlight;
 
-import fr.abachar.fr.abachar.highlight.languages.JsonLexer;
 import fr.abachar.highlight.fragment.Fragment;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.Token;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,7 +19,7 @@ public class HighlightServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String source = getSource("sample.css.txt");
+        /*String source = getSource("sample.css.txt");
 
         JsonLexer lexer = new JsonLexer(new ANTLRInputStream(source));
         while (true) {
@@ -32,7 +29,7 @@ public class HighlightServlet extends HttpServlet {
             }
 
             System.out.println("Token: (" + token.getType() + ") " + token.getText());
-        }
+        }*/
 
         //request.setAttribute("source", dumpSource(source, parser.getFragments()));
 
@@ -42,7 +39,7 @@ public class HighlightServlet extends HttpServlet {
     private String dumpSource(String source, List<Fragment> fragments) {
 
         String ret = "";
-        int pos = 0;
+        /*int pos = 0;
 
         for (Fragment fragment : fragments) {
             if (pos < fragment.getStart()) {
@@ -59,7 +56,7 @@ public class HighlightServlet extends HttpServlet {
 
         ret = ret.replace("\r\n", "\n");
         ret = ret.replace("\n", "<br />");
-        ret = ret.replace("  ", "&nbsp; ");
+        ret = ret.replace("  ", "&nbsp; ");*/
 
         return ret;
     }
