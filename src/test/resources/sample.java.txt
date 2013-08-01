@@ -1,7 +1,7 @@
 package fr.abachar.highlight;
 
-import fr.abachar.fr.abachar.highlight.languages.CssLexer;
-import fr.abachar.fr.abachar.highlight.languages.CssParser;
+import fr.abachar.highlight.languages.CssLexer;
+import fr.abachar.highlight.languages.CssParser;
 import fr.abachar.highlight.fragment.Fragment;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;

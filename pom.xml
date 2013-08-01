@@ -18,13 +18,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.antlr</groupId>
-			<artifactId>antlr4</artifactId>
-			<version>4.1</version>
+			<artifactId>antlr</artifactId>
+			<version>3.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.antlr</groupId>
-			<artifactId>antlr4-runtime</artifactId>
-			<version>4.1</version>
+			<artifactId>antlr-runtime</artifactId>
+			<version>3.4</version>
 		</dependency>
 
 		<dependency>
@@ -45,17 +45,15 @@
 		<plugins>
 			<plugin>
 				<groupId>org.antlr</groupId>
-				<artifactId>antlr4-maven-plugin</artifactId>
-				<version>4.1</version>
+				<artifactId>antlr3-maven-plugin</artifactId>
+				<version>3.4</version>
 				<configuration>
 					<sourceDirectory>${basedir}/src/main/resources</sourceDirectory>
-					<listener>false</listener>
-					<visitor>false</visitor>
 				</configuration>
 				<executions>
 					<execution>
 						<goals>
-							<goal>antlr4</goal>
+							<goal>antlr</goal>
 						</goals>
 					</execution>
 				</executions>

@@ -1,11 +1,11 @@
-package fr.abachar.highlight.tag;
+package fr.abachar.highlight;
 
 /**
  * Created with IntelliJ IDEA.
  * User: abachar
- * Date: 29/07/13
- * Time: 12:34
+ * Date: 01/08/13
+ * Time: 17:52
  * To change this template use File | Settings | File Templates.
  */
-public class Highlight {
+public class TextAnalyzer {
 }
