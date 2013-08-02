@@ -1,81 +1,110 @@
 package fr.abachar.highlight;
 
-import java.util.List;
+import fr.abachar.highlight.rules.IncludeRule;
+import fr.abachar.highlight.rules.RegexRule;
+import fr.abachar.highlight.rules.Rule;
+
+import java.util.*;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * Created with IntelliJ IDEA.
- * User: abachar
- * Date: 01/08/13
- * Time: 17:52
- * To change this template use File | Settings | File Templates.
+ * @author abachar
  */
 public abstract class Lexer {
 
-    public static interface Rule {
+    /**
+     *
+     */
+    private Map<String, State> states;
+
+    /**
+     *
+     */
+    public Lexer() {
+
+        // Initialize rules
+        initializeRules();
     }
 
-    public static class RegexRule implements Rule {
-        private String regex;
-        private RuleCallback callback;
+    /**
+     *
+     */
+    protected abstract void initializeRules();
+
+    protected void addState(String stateName, StateBuilder builder) {
+
+        State state = builder.getState();
+        state.setName(stateName);
+        if (states == null) {
+            states = new HashMap<String, State>();
+        }
+        states.put(stateName, state);
     }
 
-    public static class IncludeRule implements Rule {
-        private String name;
+    protected State resolveState(String name) {
+        return states.get(name);
     }
 
-    public static class State {
+    public List<Token> getTokens(String input) {
 
-        private List<Rule> rules;
-
-    }
-
-    public static abstract class StateCreator {
-
-        public abstract void create();
-
-        protected void include(String state) {
+        input = input.replace("\r\n", "\n").replace("\r", "\n").replace("\t", "    ");
+        if (!input.endsWith("\n")) {
+            input += "\n";
         }
 
-        protected void rule(String regexp, Token token) {
+        Context context = new Context();
+        context.setInput(input);
+        context.pushState("root");
+
+        int length = input.length();
+        while (context.getPosition() < length) {
+            if (!step(context, resolveState(context.peekState()))) {
+
+                break;
+            }
         }
 
-        protected void rule(String regexp, RuleCallback callback) {
-        }
-
-
-        protected void rule(String regexp, Token token, String nextState) {
-        }
-    }
-
-    public static abstract class RuleCallback {
-        public abstract void execute(Context context);
-    }
-
-    public static class Context {
-
-        public void addToken(String text, Token token) {
-        }
-
-        public String getText() {
-            return null /* matcher.group() */;
-        }
-
-        public String popState() {
-            return null;
-        }
-
-        public void pushState(String state) {
-
-        }
-
-        public Matcher getMatcher() {
-            return null;
-        }
-    }
-
-    protected void addState(String root, StateCreator stateCreator) {
+        return context.getTokens();
     }
 
 
+    protected boolean step(Context context, State state) {
+        for (Rule rule : state.getRules()) {
+
+            if (rule instanceof IncludeRule) {
+
+                if (step(context, resolveState(((IncludeRule) rule).getStateName()))) {
+                    return true;
+                }
+
+            } else if (rule instanceof RegexRule) {
+
+                if (runRule(context, (RegexRule) rule)) {
+                    return true;
+                }
+
+            }
+        }
+
+        return false;
+    }
+
+    private boolean runRule(Context context, RegexRule rule) {
+
+        Pattern pattern = Pattern.compile(rule.getRegex());
+        Matcher matcher = pattern.matcher(context.getInput());
+        matcher.region(context.getPosition(), context.getInput().length());
+
+        if (matcher.lookingAt()) {
+            // Set matcher
+            context.setMatcher(matcher);
+            rule.getCallback().execute(context);
+            context.setPosition(matcher.end());
+
+            return true;
+        }
+
+        return false;
+    }
 }
