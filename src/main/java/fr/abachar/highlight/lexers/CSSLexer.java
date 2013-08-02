@@ -1,12 +1,14 @@
 package fr.abachar.highlight.lexers;
 
-import fr.abachar.highlight.RegexLexer;
+import fr.abachar.highlight.Lexer;
 import fr.abachar.highlight.Token;
+
+import java.util.regex.Matcher;
 
 /**
  * @author Abdelhakim bachar
  */
-public class CSSLexer extends RegexLexer {
+public class CSSLexer extends Lexer {
 
     /**
      * Build lexer rules
@@ -26,28 +28,30 @@ public class CSSLexer extends RegexLexer {
             }
         });
 
-/*
-      state :value do
-        mixin :basics
-        rule /url\(.*?\)/, 'Literal.String.Other'
-        rule /#[0-9a-f]{1,6}/i, 'Literal.Number' # colors
-        rule /#{number}(?:em|px|%|pt|pc|in|mm|m|ex|s)?\b/, 'Literal.Number'
-        rule /[\[\]():\/.,]/, 'Punctuation'
-        rule /"(\\\\|\\"|[^"])*"/, 'Literal.String.Single'
-        rule /'(\\\\|\\'|[^'])*'/, 'Literal.String.Double'
-        rule(identifier) do |m|
-          if self.class.constants.include? m[0]
-            token 'Name.Constant'
-          elsif self.class.builtins.include? m[0]
-            token 'Name.Builtin'
-          else
-            token 'Name'
-          end
-        end
-      end
+        addState("value", new StateCreator() {
+            public void create() {
+                include("basics");
+                rule("url\\(.*?\\)", Token.LiteralStringOther);
+                rule("#[0-9a-f]{1,6}", Token.LiteralNumber);
+                rule("-?(?:[0-9]+(\\.[0-9]+)?|\\.[0-9]+)(?:em|px|%|pt|pc|in|mm|m|ex|s)?\\b", Token.LiteralNumber);
+                rule("[\\[\\]():\\/.,]", Token.Punctuation);
+                rule("\"(\\\\\\\\|\\\\\"|[^\"])*\"", Token.LiteralStringDouble);
+                rule("'(\\\\\\\\|\\\\'|[^'])*'", Token.LiteralStringSingle);
+                rule("[a-z0-9_-]+", new RuleCallback() {
+                    public void execute(Context context) {
 
-
- */
+                        String identifier = context.getText();
+                        if (isConstant(identifier)) {
+                            context.addToken(identifier, Token.NameLabel);
+                        } else if (isBuiltin(identifier)) {
+                            context.addToken(identifier, Token.NameBuiltin);
+                        } else {
+                            context.addToken(identifier, Token.Name);
+                        }
+                    }
+                });
+            }
+        });
 
         addState("at_rule", new StateCreator() {
             public void create() {
@@ -72,18 +76,17 @@ public class CSSLexer extends RegexLexer {
             }
         });
 
-/*
         addState("at_content", new StateCreator() {
             public void create() {
                 rule("}", new RuleCallback() {
                     public void execute(Context context) {
-                        context.setToken(Token.Punctuation);
+                        context.addToken(context.getText(), Token.Punctuation);
                         context.popState();
                         context.popState();
                     }
                 });
+            }
         });
-*/
 
         addState("basics", new StateCreator() {
             public void create() {
@@ -92,26 +95,29 @@ public class CSSLexer extends RegexLexer {
             }
         });
 
-/*
-      state :stanza do
-        mixin :basics
-        rule /}/, 'Punctuation', :pop!
-        rule /(#{identifier})(\s*)(:)/m do |m|
-          if self.class.attributes.include? m[1]
-            group 'Name.Label'
-          elsif self.class.vendor_prefixes.any? { |p| m[1].start_with?(p) }
-            group 'Name.Label'
-          else
-            group 'Name.Property'
-          end
+        addState("stanza", new StateCreator() {
+            public void create() {
+                include("basics");
+                rule("}", Token.Punctuation, "pop"); // pop is specific state
+                rule("([a-z0-9_-]+)(\\s*)(:)", new RuleCallback() {
+                    public void execute(Context context) {
+                        Matcher m = context.getMatcher();
 
-          group 'Text'
-          group 'Punctuation'
+                        String identifier = m.group(1);
+                        if (isAttribute(identifier) || hasVendorPrefixe(identifier)) {
+                            context.addToken(identifier, Token.NameLabel);
+                        } else {
+                            context.addToken(identifier, Token.NameProperty);
+                        }
 
-          push :stanza_value
-        end
-      end
- */
+                        context.addToken(m.group(2), Token.Text);
+                        context.addToken(m.group(3), Token.Punctuation);
+
+                        context.pushState("stanza_value");
+                    }
+                });
+            }
+        });
 
         addState("stanza_value", new StateCreator() {
             public void create() {
@@ -122,5 +128,21 @@ public class CSSLexer extends RegexLexer {
                 include("value");
             }
         });
+    }
+
+    private boolean isAttribute(String identifier) {
+        return false;
+    }
+
+    private boolean isConstant(String identifier) {
+        return false;
+    }
+
+    private boolean isBuiltin(String identifier) {
+        return false;
+    }
+
+    private boolean hasVendorPrefixe(String identifier) {
+        return false;
     }
 }
