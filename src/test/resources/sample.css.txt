@@ -1,3 +1,7 @@
+body {
+  font-family: "Helvetica Neue", Helvetica;
+}
+
 /*!
  * Bootstrap v3.0.0
  *
@@ -1301,7 +1305,7 @@ input[type="search"] {
 input[type="radio"],
 input[type="checkbox"] {
   margin: 4px 0 0;
-  margin-top: 1px \9;
+  margin-top: 1px 9;
   /* IE8-9 */
 
   line-height: normal;

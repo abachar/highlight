@@ -22,11 +22,11 @@ public class CSSLexer extends Lexer {
         addState("root", new StateBuilder()
                 .include("basics")
                 .rule("\\{", TokenType.Punctuation, "#push:stanza")
-                .rule(":[a-z0-9_-]+", TokenType.NameDecorator)
-                .rule("\\.[a-z0-9_-]+", TokenType.NameClass)
-                .rule("#[a-z0-9_-]+", TokenType.NameFunction)
-                .rule("@[a-z0-9_-]+", TokenType.NameFunction, "#push:at_rule")
-                .rule("[a-z0-9_-]+", TokenType.NameTag)
+                .rule(":[a-zA-Z0-9_-]+", TokenType.NameDecorator)
+                .rule("\\.[a-zA-Z0-9_-]+", TokenType.NameClass)
+                .rule("#[a-zA-Z0-9_-]+", TokenType.NameFunction)
+                .rule("@[a-zA-Z0-9_-]+", TokenType.NameFunction, "#push:at_rule")
+                .rule("[a-zA-Z0-9_-]+", TokenType.NameTag)
                 .rule("[~^*!%&\\[\\]()<>|+=@:;,./?-]", TokenType.Operator)
                 .rule("\"(\\\\\\\\|\\\\\"|[^\"])*\"", TokenType.LiteralStringDouble)
         );
@@ -34,12 +34,12 @@ public class CSSLexer extends Lexer {
         addState("value", new StateBuilder()
                 .include("basics")
                 .rule("url\\(.*?\\)", TokenType.LiteralStringOther)
-                .rule("#[0-9a-f]{1,6}", TokenType.LiteralNumber)
+                .rule("#[0-9a-fA-F]{1,6}", TokenType.LiteralNumber)
                 .rule("[\\.-]?[0-9]*[\\.]?[0-9]+(em|px|\\%|pt|pc|in|mm|cm|ex)", TokenType.LiteralNumber)
                 .rule("[\\[\\]():\\/.,]", TokenType.Punctuation)
                 .rule("\"(\\\\\\\\|\\\\\"|[^\"])*\"", TokenType.LiteralStringDouble)
                 .rule("'(\\\\\\\\|\\\\'|[^'])*'", TokenType.LiteralStringSingle)
-                .rule("[a-z0-9_-]+", new RuleCallback() {
+                .rule("[a-zA-Z0-9_-]+", new RuleCallback() {
                     public void execute(Context context) {
 
                         String identifier = context.getText();
@@ -55,7 +55,7 @@ public class CSSLexer extends Lexer {
         );
 
         addState("at_rule", new StateBuilder()
-                .rule("\\{(?=\\s*[a-z0-9_-]+\\s*:)", TokenType.Punctuation, "#push:at_stanza")
+                .rule("\\{(?=\\s*[a-zA-Z0-9_-]+\\s*:)", TokenType.Punctuation, "#push:at_stanza")
                 .rule("\\{", TokenType.Punctuation, "#push:at_body")
                 .rule(";", TokenType.Punctuation, "#pop")
                 .include("value")
@@ -89,7 +89,7 @@ public class CSSLexer extends Lexer {
         addState("stanza", new StateBuilder()
                 .include("basics")
                 .rule("}", TokenType.Punctuation, "#pop")
-                .rule("([a-z0-9_-]+)(\\s*)(:)", new RuleCallback() {
+                .rule("([a-zA-Z0-9_-]+)(\\s*)(:)", new RuleCallback() {
                     public void execute(Context context) {
                         Matcher m = context.getMatcher();
 

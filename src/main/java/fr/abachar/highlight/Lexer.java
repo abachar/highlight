@@ -60,7 +60,6 @@ public abstract class Lexer {
         int length = input.length();
         while (context.getPosition() < length) {
             if (!step(context, resolveState(context.peekState()))) {
-
                 break;
             }
         }

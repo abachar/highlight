@@ -107,6 +107,6 @@ public class HighlightTest {
         sbHtml.append("    <div class=\"hll\">").append(output).append("    </div>");
         sbHtml.append("  </body>");
         sbHtml.append("</html>");
-        IOUtils.write(sbHtml.toString(), new FileOutputStream("/home/abachar/Bureau/highlight/index.html"));
+        IOUtils.write(sbHtml.toString(), new FileOutputStream("/Users/abachar/Desktop/out/index.html"));
     }
 }
