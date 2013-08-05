@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 /**
  * @author Abdelhakim bachar
  */
-public class CSSLexer extends Lexer {
+public class CssLexer extends Lexer {
 
     /**
      * Build lexer rules

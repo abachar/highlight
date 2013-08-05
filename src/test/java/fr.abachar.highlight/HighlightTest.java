@@ -1,14 +1,12 @@
 package fr.abachar.highlight;
 
-import fr.abachar.highlight.lexers.CSSLexer;
+import fr.abachar.highlight.lexers.XmlLexer;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author abachar
@@ -18,84 +16,37 @@ public class HighlightTest {
     @Test
     public void testCSSLexer() throws IOException {
 
+        int numLines = 0;
+        String input = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("sample.xml.txt"));
         String output = "";
-        CSSLexer lexer = new CSSLexer();
-        List<Token> tokens = lexer.getTokens(IOUtils.toString(getClass().getClassLoader().getResourceAsStream("sample.css.txt")));
+        XmlLexer lexer = new XmlLexer();
+
+        // Clean Crlf
+        input = input.replace("\r\n", "\n");
+        input = input.replace("\r", "\n");
+
+        // Parse
+        List<Token> tokens = lexer.getTokens(input);
         for (Token token : tokens) {
-
-            output += "<span class=\"" + token.getTokenType().getCssClass() + "\">" + token.getValue()  + "</span>";
-        }
-
-        output = output.replace("\r\n", "\n");
-        output = output.replace("\n", "<br />");
-        output = output.replace("  ", "&nbsp; ");
-        writeOutput(output);
-    }
-
-    @Test
-    public void test() throws IOException {
-
-        String[] rules = {
-                "\\s+",
-                "/\\*(?:.|\\n)*?\\*/",
-                "([a-z0-9_-]+)(\\s*)(:)"
-        };
-
-        String input = "/* Ceci est \nun commentaire */   \n font   :";
-        int pos = 0;
-        while (pos < input.length()) {
-            for (String rule : rules) {
-                System.out.printf("Test - [%s] at %d\n", rule, pos);
-
-                Pattern pattern = Pattern.compile(rule);
-                Matcher matcher = pattern.matcher(input);
-                matcher.region(pos, input.length());
-
-                if (matcher.lookingAt()) {
-
-                    if (matcher.groupCount() > 1) {
-                        String text = matcher.group();
-                        pos = matcher.end();
-
-                        System.out.printf("[%s] => '%s', '%s', '%s'\n", rule, matcher.group(1), matcher.group(2), matcher.group(3));
-                    } else {
-                        pos = matcher.end();
-                        System.out.printf("[%s] => '%s'\n", rule, matcher.group());
-                    }
-
-                    break;
+            String value = token.getValue();
+            for (int i = 0; i < value.length(); i++) {
+                char character = value.charAt(i);
+                if (character == '\n') {
+                    numLines++;
                 }
             }
+
+            output += "<span class=\"" + token.getTokenType().getCssClass() + "\">"
+                    + HtmlUtils.htmlEscape(value)
+                    + "</span>";
         }
 
-        //.rule("\\s+", TokenType.Text)
-        //.rule(, TokenType.Comment)
-
-        /*// Get test source file
-        String source = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("comment.css.txt"));
-        String output = "";
-
-        //
-        CSSLexer lexer = new CSSLexer(new ANTLRStringStream(source));
-        String[] tokenNames = lexer.getTokenNames();
-
-        while (true) {
-            Token token = lexer.nextToken();
-            if (token.getType() == Token.EOF) {
-                break;
-            }
-
-            TokenType type = TokenType.fromIndex(token.getType());
-            output += "<span class=\"" + type.getCssClass() + "\">" + token.getText()  + "</span>";
-        }
-
-        output = output.replace("\r\n", "\n");
         output = output.replace("\n", "<br />");
         output = output.replace("  ", "&nbsp; ");
-        writeOutput(output);*/
+        writeOutput(output, numLines);
     }
 
-    private void writeOutput(String output) throws IOException {
+    private void writeOutput(String output, int numLines) throws IOException {
         StringBuilder sbHtml = new StringBuilder();
         sbHtml.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
         sbHtml.append("<!DOCTYPE html>");
@@ -104,7 +55,16 @@ public class HighlightTest {
         sbHtml.append("    <link href=\"style.css\" rel=\"stylesheet\">");
         sbHtml.append("  </head>");
         sbHtml.append("  <body>");
-        sbHtml.append("    <div class=\"hll\">").append(output).append("    </div>");
+        sbHtml.append("    <div>");
+        sbHtml.append("      <div class=\"linenums\">");
+        sbHtml.append("        <ul>");
+        for (int i = 1; i <= numLines; i++) {
+            sbHtml.append("          <li>").append(i).append("</li>");
+        }
+        sbHtml.append("        </ul>");
+        sbHtml.append("      </div>");
+        sbHtml.append("      <div class=\"code hll\">").append( output).append("</div>");
+        sbHtml.append("    </div>");
         sbHtml.append("  </body>");
         sbHtml.append("</html>");
         IOUtils.write(sbHtml.toString(), new FileOutputStream("/home/abachar/Bureau/highlight/index.html"));
