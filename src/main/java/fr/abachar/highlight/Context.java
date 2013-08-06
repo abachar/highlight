@@ -42,10 +42,12 @@ public class Context {
     }
 
     public String popState() {
+        System.out.print("--------------------------------------- POP");
         return stateStack.pop();
     }
 
     public void pushState(String state) {
+        System.out.print("--------------------------------------- PUSH (" + state +")");
         stateStack.push(state);
     }
 
