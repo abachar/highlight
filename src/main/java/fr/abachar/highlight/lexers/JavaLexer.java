@@ -1,13 +1,15 @@
 package fr.abachar.highlight.lexers;
 
-import fr.abachar.highlight.Lexer;
-import fr.abachar.highlight.StateBuilder;
-import fr.abachar.highlight.TokenType;
+import fr.abachar.highlight.*;
+import fr.abachar.highlight.rules.RuleCallback;
+
+import java.util.List;
+import java.util.regex.Matcher;
 
 /**
  * @author Abdelhakim bachar
  */
-public class JavaLexer extends Lexer {
+public class JavaLexer extends RegexLexer {
 
 
     /**
@@ -18,44 +20,43 @@ public class JavaLexer extends Lexer {
 
         addState("root", new StateBuilder()
 
-/*
+                .rule("^(\\s*(?:[a-zA-Z_][a-zA-Z0-9_\\.\\[\\]<>]*\\s+)+?)"
+                        + "([a-zA-Z_][a-zA-Z0-9_]*)"
+                        + "(\\s*)(\\()", new RuleCallback() {
+                    public void execute(Context context) {
 
-rule %r(^
-(\s*(?:[a-zA-Z_][a-zA-Z0-9_.\[\]]*\s+)+?) # return arguments
-([a-zA-Z_][a-zA-Z0-9_]*)                  # method name
-(\s*)(\()                                 # signature start
-)mx do |m|
-    # TODO: do this better, this shouldn't need a delegation
-    delegate Java, m[1]
-    token 'Name.Function', m[2]
-    token 'Text', m[3]
-    token 'Punctuation', m[4]
-end
+                        Matcher m = context.getMatcher();
 
-rule /\s+/, 'Text'
-rule %r(//.*?$), 'Comment.Single'
-rule %r(/\*.*?\* /)m, 'Comment.Multiline'
-rule /@#{id}/, 'Name.Decorator'
-rule /(?:#{keywords.join('|')})\b/, 'Keyword'
-rule /(?:#{declarations.join('|')})\b/, 'Keyword.Declaration'
-rule /(?:#{types.join('|')})/, 'Keyword.Type'
-rule /package\b/, 'Keyword.Namespace'
-rule /(?:true|false|null)\b/, 'Keyword.Constant'
-rule /(?:class|interface)\b/, 'Keyword.Declaration', :class
-rule /import\b/, 'Keyword.Namespace', :import
-rule /"(\\\\|\\"|[^"])*"/, 'Literal.String'
-rule /'(?:\\.|[^\\]|\\u[0-9a-f]{4})'/, 'Literal.String.Char'
-rule /(\.)(#{id})/ do
-    group 'Operator'
-    group 'Name.Attribute'
-end
-rule /#{id}:/, 'Name.Label'
-rule /\$?#{id}/, 'Name'
-rule /[~^*!%&\[\](){}<>\|+=:;,.\/?-]/, 'Operator'
-rule /[0-9][0-9]*\.[0-9]+([eE][0-9]+)?[fd]?/, 'Literal.Number.Float'
-rule /0x[0-9a-f]+/, 'Literal.Number.Hex'
-rule /[0-9]+L?/, 'Literal.Number.Integer'
- */
+                        // Delegate
+                        JavaLexer lexer = new JavaLexer();
+                        List<Token> tokens = lexer.getTokens(m.group(1));
+                        context.getTokens().addAll(tokens);
+
+                        context.addToken(m.group(2), TokenType.NameFunction);
+                        context.addToken(m.group(3), TokenType.Text);
+                        context.addToken(m.group(4), TokenType.Operator);
+                    }
+                })
+                .rule("\\s+", TokenType.Text)
+                .rule("//.*?$", TokenType.CommentSingle)
+                .rule("/\\*(?:.|\n)*?\\*/", TokenType.CommentSingle)
+                .rule("@[a-zA-Z_][a-zA-Z0-9_]*", TokenType.NameDecorator)
+                .rule("(assert|break|case|catch|continue|default|do|else|finally|for|if|goto|instanceof|new|return|switch|this|throw|try|while)", TokenType.Keyword)
+                .rule("(abstract|const|enum|extends|final|implements|native|private|protected|public|static|strictfp|super|synchronized|throws|transient|volatile)", TokenType.KeywordDeclaration)
+                .rule("(boolean|byte|char|double|float|int|long|short|void)", TokenType.KeywordType)
+                .rule("(package)(\\s+)", byGroups(TokenType.KeywordNamespace, TokenType.Text))
+                .rule("(true|false|null)", TokenType.KeywordConstant)
+                .rule("(class|interface)", TokenType.KeywordDeclaration, "#push:class")
+                .rule("import", TokenType.KeywordNamespace, "#push:import")
+                .rule("\"(\\\\\\\\|\\\\\"|[^\"])*\"", TokenType.LiteralString)
+                .rule("'\\\\.'|'[^\\\\]'|'\\\\u[0-9a-fA-F]{4}'", TokenType.LiteralStringChar)
+                .rule("(\\.)([a-zA-Z_][a-zA-Z0-9_]*)", byGroups(TokenType.Operator, TokenType.NameAttribute))
+                .rule("[a-zA-Z_][a-zA-Z0-9_]*:", TokenType.NameLabel)
+                .rule("[a-zA-Z_\\$][a-zA-Z0-9_]*", TokenType.Name)
+                .rule("[~\\^\\*!%&\\[\\]\\(\\)\\{\\}<>\\|+=:;,./?-]", TokenType.Operator)
+                .rule("[0-9][0-9]*\\.[0-9]+([eE][0-9]+)?[fd]?", TokenType.LiteralNumberFloat)
+                .rule("0x[0-9a-f]+", TokenType.LiteralNumberHex)
+                .rule("[0-9]+L?", TokenType.LiteralNumberInteger)
         );
 
         addState("class", new StateBuilder()
@@ -65,31 +66,19 @@ rule /[0-9]+L?/, 'Literal.Number.Integer'
 
         addState("import", new StateBuilder()
                 .rule("\\s+", TokenType.Text)
-                .rule("[a-z0-9_.]+\\*?", TokenType.NameNamespace, "#pop")
+                .rule("[a-zA-Z0-9_.]+\\*?", TokenType.NameNamespace, "#pop")
         );
-
-
     }
 
-   /*
+/*
 
 
-      keywords = %w(
-        assert break case catch continue default do else finally for
-        if goto instanceof new return switch this throw try while
-      )
-
-      declarations = %w(
-        abstract const enum extends final implements native private protected
-        public static strictfp super synchronized throws transient volatile
-      )
-
-      types = %w(boolean byte char double float int long short void)
-
-      id = /[a-zA-Z_][a-zA-Z0-9_]* /
-
-    state :root do
 
 
-    */
+
+
+
+id = [a-zA-Z_][a-zA-Z0-9_]*
+
+*/
 }

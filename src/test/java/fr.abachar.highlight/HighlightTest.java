@@ -1,5 +1,6 @@
 package fr.abachar.highlight;
 
+import fr.abachar.highlight.lexers.JavaLexer;
 import fr.abachar.highlight.lexers.XmlLexer;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -17,13 +18,9 @@ public class HighlightTest {
     public void testCSSLexer() throws IOException {
 
         int numLines = 0;
-        String input = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("sample.xml.txt"));
+        String input = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("sample.java.txt"));
         String output = "";
-        XmlLexer lexer = new XmlLexer();
-
-        // Clean Crlf
-        input = input.replace("\r\n", "\n");
-        input = input.replace("\r", "\n");
+        JavaLexer lexer = new JavaLexer();
 
         // Parse
         List<Token> tokens = lexer.getTokens(input);
@@ -67,6 +64,6 @@ public class HighlightTest {
         sbHtml.append("    </div>");
         sbHtml.append("  </body>");
         sbHtml.append("</html>");
-        IOUtils.write(sbHtml.toString(), new FileOutputStream("/Users/abachar/Desktop/out/index.html"));
+        IOUtils.write(sbHtml.toString(), new FileOutputStream("/home/abachar/Bureau/highlight/index.html"));
     }
 }

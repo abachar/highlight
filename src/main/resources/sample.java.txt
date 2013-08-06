@@ -3,7 +3,6 @@ package fr.abachar.highlight;
 import fr.abachar.highlight.rules.IncludeRule;
 import fr.abachar.highlight.rules.RegexRule;
 import fr.abachar.highlight.rules.Rule;
-import fr.abachar.highlight.rules.RuleCallback;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -50,6 +49,9 @@ public abstract class Lexer {
     public List<Token> getTokens(String input) {
 
         input = input.replace("\r\n", "\n").replace("\r", "\n").replace("\t", "    ");
+        if (!input.endsWith("\n")) {
+            input += "\n";
+        }
 
         Context context = new Context();
         context.setInput(input);

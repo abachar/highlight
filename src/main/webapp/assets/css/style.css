@@ -1,0 +1,27 @@
+body {
+    font-family: 'DejaVu Sans Mono', Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    list-style: none;
+    display: block;
+    text-align: right;
+}
+
+.linenums {
+    float: left;
+    width: 30px;
+    padding: 20px 5px;
+    background-color: #eeeeec
+}
+
+.code {
+    margin-left: 40px;
+    padding: 20px;
+}

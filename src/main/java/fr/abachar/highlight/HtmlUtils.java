@@ -54,6 +54,8 @@ public class HtmlUtils {
 
     static {
         CHARACTER_TO_ENTITY_REFERENCE_MAP = new HashMap<Integer, String>();
+        CHARACTER_TO_ENTITY_REFERENCE_MAP.put(32, "&nbsp;");
+
         CHARACTER_TO_ENTITY_REFERENCE_MAP.put(160, "&nbsp;");
         CHARACTER_TO_ENTITY_REFERENCE_MAP.put(161, "&iexcl;");
         CHARACTER_TO_ENTITY_REFERENCE_MAP.put(162, "&cent;");

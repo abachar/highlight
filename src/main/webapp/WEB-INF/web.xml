@@ -7,7 +7,7 @@
 
     <servlet>
         <servlet-name>Highlight Servlet</servlet-name>
-        <servlet-class>fr.abachar.highlight.HighlightServlet</servlet-class>
+        <servlet-class>fr.abachar.highlight.servlet.HighlightServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
