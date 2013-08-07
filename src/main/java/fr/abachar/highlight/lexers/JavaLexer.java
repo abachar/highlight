@@ -22,9 +22,7 @@ public class JavaLexer extends RegexLexer {
 
         addState("root", new StateBuilder()
 
-                .rule("^(\\s*(?:[a-zA-Z_][a-zA-Z0-9_\\.\\[\\]<>]*\\s+)+?)"
-                        + "([a-zA-Z_][a-zA-Z0-9_]*)"
-                        + "(\\s*)(\\()", new RuleCallback() {
+                .rule("^(\\s*(?:[a-zA-Z_][a-zA-Z0-9_\\.\\[\\]]*\\s+)+?)([a-zA-Z_][a-zA-Z0-9_]*)(\\s*)(\\()", new RuleCallback() {
                     public void execute(Context context) {
 
                         Matcher m = context.getMatcher();
@@ -41,8 +39,8 @@ public class JavaLexer extends RegexLexer {
                     }
                 })
                 .rule("\\s+", TokenType.Text)
-                .rule("//.*$", TokenType.CommentSingle)
-                .rule("/\\*(?:.|\n)*?\\*/", TokenType.CommentMultiline)
+                .rule("//.*?$", TokenType.CommentSingle)
+                .rule("/\\*.*?\\*/", TokenType.CommentMultiline)
                 .rule("@[a-zA-Z_][a-zA-Z0-9_]*", TokenType.NameDecorator)
                 .rule("(assert|break|case|catch|continue|default|do|else|finally|for|if|goto|instanceof|new|return|switch|this|throw|try|while)", TokenType.Keyword)
                 .rule("(abstract|const|enum|extends|final|implements|native|private|protected|public|static|strictfp|super|synchronized|throws|transient|volatile)", TokenType.KeywordDeclaration)

@@ -94,7 +94,7 @@ public abstract class Lexer {
 
     private boolean runRule(Context context, RegexRule rule) {
 
-        Pattern pattern = Pattern.compile(rule.getRegex(), Pattern.MULTILINE);
+        Pattern pattern = Pattern.compile(rule.getRegex(), Pattern.MULTILINE | Pattern.DOTALL);
         Matcher matcher = pattern.matcher(context.getInput());
         matcher.region(context.getPosition(), context.getInput().length());
 
