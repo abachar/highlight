@@ -17,6 +17,12 @@ import java.util.List;
  */
 public class HighlightServlet extends HttpServlet {
 
+    /**
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ServletException
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
             ServletException {
 
@@ -44,6 +50,6 @@ public class HighlightServlet extends HttpServlet {
         output = output.replace("\n", "<br />");
 
         request.setAttribute("source", output);
-        getServletContext().getRequestDispatcher("/source.jsp").forward(request,response);
+        getServletContext().getRequestDispatcher("/source.jsp").forward(request, response);
     }
 }

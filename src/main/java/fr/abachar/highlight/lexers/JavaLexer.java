@@ -11,12 +11,14 @@ import java.util.regex.Matcher;
  */
 public class JavaLexer extends RegexLexer {
 
-
     /**
      * Build lexer rules
      */
     @Override
     protected void initializeRules() {
+
+        // Current lexer
+        final Lexer _this = this;
 
         addState("root", new StateBuilder()
 
@@ -28,9 +30,10 @@ public class JavaLexer extends RegexLexer {
                         Matcher m = context.getMatcher();
 
                         // Delegate
-                        JavaLexer lexer = new JavaLexer();
-                        List<Token> tokens = lexer.getTokens(m.group(1));
-                        context.getTokens().addAll(tokens);
+                        if (logger.isInfoEnabled()) {
+                            logger.info("Delegating [{}] to JavaLexer", m.group(1).replace("\n", "\\n"));
+                        }
+                        delegate(context, new JavaLexer(), m.group(1));
 
                         context.addToken(m.group(2), TokenType.NameFunction);
                         context.addToken(m.group(3), TokenType.Text);
@@ -38,13 +41,13 @@ public class JavaLexer extends RegexLexer {
                     }
                 })
                 .rule("\\s+", TokenType.Text)
-                .rule("//.*?$", TokenType.CommentSingle)
-                .rule("/\\*(?:.|\n)*?\\*/", TokenType.CommentSingle)
+                .rule("//.*$", TokenType.CommentSingle)
+                .rule("/\\*(?:.|\n)*?\\*/", TokenType.CommentMultiline)
                 .rule("@[a-zA-Z_][a-zA-Z0-9_]*", TokenType.NameDecorator)
                 .rule("(assert|break|case|catch|continue|default|do|else|finally|for|if|goto|instanceof|new|return|switch|this|throw|try|while)", TokenType.Keyword)
                 .rule("(abstract|const|enum|extends|final|implements|native|private|protected|public|static|strictfp|super|synchronized|throws|transient|volatile)", TokenType.KeywordDeclaration)
                 .rule("(boolean|byte|char|double|float|int|long|short|void)", TokenType.KeywordType)
-                .rule("(package)(\\s+)", byGroups(TokenType.KeywordNamespace, TokenType.Text))
+                .rule("package", TokenType.KeywordNamespace, "#push:package")
                 .rule("(true|false|null)", TokenType.KeywordConstant)
                 .rule("(class|interface)", TokenType.KeywordDeclaration, "#push:class")
                 .rule("import", TokenType.KeywordNamespace, "#push:import")
@@ -68,17 +71,10 @@ public class JavaLexer extends RegexLexer {
                 .rule("\\s+", TokenType.Text)
                 .rule("[a-zA-Z0-9_.]+\\*?", TokenType.NameNamespace, "#pop")
         );
+
+        addState("package", new StateBuilder()
+                .rule("\\s+", TokenType.Text)
+                .rule("[a-zA-Z0-9_.]+\\*?", TokenType.NameNamespace, "#pop")
+        );
     }
-
-/*
-
-
-
-
-
-
-
-id = [a-zA-Z_][a-zA-Z0-9_]*
-
-*/
 }

@@ -3,9 +3,12 @@ package fr.abachar.highlight;
 import fr.abachar.highlight.rules.IncludeRule;
 import fr.abachar.highlight.rules.RegexRule;
 import fr.abachar.highlight.rules.Rule;
-import fr.abachar.highlight.rules.RuleCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +16,8 @@ import java.util.regex.Pattern;
  * @author abachar
  */
 public abstract class Lexer {
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      *
@@ -89,7 +94,7 @@ public abstract class Lexer {
 
     private boolean runRule(Context context, RegexRule rule) {
 
-        Pattern pattern = Pattern.compile(rule.getRegex());
+        Pattern pattern = Pattern.compile(rule.getRegex(), Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(context.getInput());
         matcher.region(context.getPosition(), context.getInput().length());
 

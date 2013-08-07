@@ -1,5 +1,8 @@
 package fr.abachar.highlight;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +12,10 @@ import java.util.regex.Matcher;
  *
  */
 public class Context {
+
+    private static final Logger logger = LoggerFactory.getLogger(Context.class);
+
+    private Long contextId;
 
     /**
      * Input
@@ -31,9 +38,15 @@ public class Context {
      */
     LinkedList<String> stateStack = new LinkedList<String>();
 
+    public Context() {
+        contextId = (long) (100000l * Math.random());
+    }
+
 
     public void addToken(String text, TokenType token) {
-        System.out.printf("ADD TOKEN [%s:%s] -> [%s]\n", peekState(), token.name(), text.replace("\n", "\\n"));
+        if (logger.isInfoEnabled()) {
+            logger.info("({}) ADD TOKEN [{}:{}] -> [{}]", contextId, peekState(), token.name(), text.replace("\n", "\\n"));
+        }
         tokens.add(new Token(0, token, text));
     }
 
@@ -42,12 +55,16 @@ public class Context {
     }
 
     public String popState() {
-        System.out.print("--------------------------------------- POP");
+        if (logger.isInfoEnabled()) {
+            logger.info("({}) --------------------------------------- POP", contextId);
+        }
         return stateStack.pop();
     }
 
     public void pushState(String state) {
-        System.out.print("--------------------------------------- PUSH (" + state +")");
+        if (logger.isInfoEnabled()) {
+            logger.info("({}) --------------------------------------- PUSH ({})", contextId, state);
+        }
         stateStack.push(state);
     }
 
