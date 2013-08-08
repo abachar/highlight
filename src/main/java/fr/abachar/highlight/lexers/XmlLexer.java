@@ -1,13 +1,13 @@
 package fr.abachar.highlight.lexers;
 
-import fr.abachar.highlight.Lexer;
+import fr.abachar.highlight.RegexLexer;
 import fr.abachar.highlight.StateBuilder;
 import fr.abachar.highlight.TokenType;
 
 /**
  * @author Abdelhakim bachar
  */
-public class XmlLexer extends Lexer {
+public class XmlLexer extends RegexLexer {
 
     /**
      * Build lexer rules

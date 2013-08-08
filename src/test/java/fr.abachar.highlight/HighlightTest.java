@@ -1,7 +1,7 @@
 package fr.abachar.highlight;
 
-import fr.abachar.highlight.lexers.JavaLexer;
-import fr.abachar.highlight.lexers.XmlLexer;
+import fr.abachar.highlight.lexers.web.HtmlLexer;
+import fr.abachar.highlight.lexers.web.JavascriptLexer;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
@@ -17,10 +17,10 @@ public class HighlightTest {
     @Test
     public void testCSSLexer() throws IOException {
 
-        int numLines = 0;
-        String input = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("sample.java.txt"));
+        int numLines = 1;
+        String input = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("sample.js.txt"));
         String output = "";
-        JavaLexer lexer = new JavaLexer();
+        Lexer lexer = new JavascriptLexer();
 
         // Parse
         List<Token> tokens = lexer.getTokens(input);
@@ -33,9 +33,15 @@ public class HighlightTest {
                 }
             }
 
-            output += "<span class=\"" + token.getTokenType().getCssClass() + "\">"
-                    + HtmlUtils.htmlEscape(value)
-                    + "</span>";
+            if (token.getTokenType().getCssClass().length() > 0) {
+                output += "<span class=\"" + token.getTokenType().getCssClass() + "\">"
+                        + HtmlUtils.htmlEscape(value)
+                        + "</span>";
+            } else {
+                output += HtmlUtils.htmlEscape(value);
+            }
+
+
         }
 
         output = output.replace("\n", "<br />");
@@ -60,7 +66,7 @@ public class HighlightTest {
         }
         sbHtml.append("        </ul>");
         sbHtml.append("      </div>");
-        sbHtml.append("      <div class=\"code hll\">").append( output).append("</div>");
+        sbHtml.append("      <div class=\"code hll\">").append(output).append("</div>");
         sbHtml.append("    </div>");
         sbHtml.append("  </body>");
         sbHtml.append("</html>");

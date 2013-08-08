@@ -5,11 +5,20 @@ import fr.abachar.highlight.rules.RuleCallback;
 
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Abdelhakim bachar
  */
 public class JavaLexer extends RegexLexer {
+
+    /**
+     *
+     */
+    public JavaLexer() {
+        this.name = "Java";
+        this.flags = Pattern.DOTALL | Pattern.MULTILINE;
+    }
 
     /**
      * Build lexer rules

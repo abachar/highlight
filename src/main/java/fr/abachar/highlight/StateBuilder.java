@@ -54,7 +54,10 @@ public class StateBuilder {
                 if (nextState.startsWith("#pop")) {
                     context.popState();
                 } else if (nextState.startsWith("#push")) {
-                    context.pushState(nextState.substring(6));
+                    String[] states = nextState.substring(6).split(",");
+                    for (String state : states) {
+                        context.pushState(state);
+                    }
                 }
             }
         });

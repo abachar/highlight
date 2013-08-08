@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>This is a title</title>
+
+		<style type="text/css">
+        body {
+        	background-color: yellow;
+        }
+        p {
+        	color: blue;
+        }
+        </style>
+
+		<script>
+			$(document).ready(function() {
+				$('#message').html("This is a paragraph.");
+			});
+		</script>
+		<noscript>Sorry, your browser does not support JavaScript!</noscript>
+	</head>
+	<body>
+		<p id="message">Hello world!</p>
+	</body>
+</html>

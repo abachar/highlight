@@ -1,7 +1,7 @@
-package fr.abachar.highlight.lexers;
+package fr.abachar.highlight.lexers.web;
 
 import fr.abachar.highlight.Context;
-import fr.abachar.highlight.Lexer;
+import fr.abachar.highlight.RegexLexer;
 import fr.abachar.highlight.StateBuilder;
 import fr.abachar.highlight.TokenType;
 import fr.abachar.highlight.rules.RuleCallback;
@@ -11,13 +11,32 @@ import java.util.regex.Matcher;
 /**
  * @author Abdelhakim bachar
  */
-public class CssLexer extends Lexer {
+public class CssLexer extends RegexLexer {
+
+    /**
+     *
+     */
+    public CssLexer() {
+        this.name = "CSS";
+    }
 
     /**
      * Build lexer rules
      */
     @Override
     protected void initializeRules() {
+
+        addState("basics", new StateBuilder()
+                .rule("\\s+", TokenType.Text)
+                .rule("/\\*(?:.|\\n)*?\\*", TokenType.Comment)
+        );
+
+        addState("at_rule", new StateBuilder()
+                .rule("\\{(?=\\s*[a-zA-Z0-9_-]+\\s*:)", TokenType.Punctuation, "#push:at_stanza")
+                .rule("\\{", TokenType.Punctuation, "#push:at_body")
+                .rule(";", TokenType.Punctuation, "#pop")
+                .include("value")
+        );
 
         addState("root", new StateBuilder()
                 .include("basics")
@@ -54,12 +73,6 @@ public class CssLexer extends Lexer {
                 })
         );
 
-        addState("at_rule", new StateBuilder()
-                .rule("\\{(?=\\s*[a-zA-Z0-9_-]+\\s*:)", TokenType.Punctuation, "#push:at_stanza")
-                .rule("\\{", TokenType.Punctuation, "#push:at_body")
-                .rule(";", TokenType.Punctuation, "#pop")
-                .include("value")
-        );
 
         addState("at_body", new StateBuilder()
                 .include("at_content")
@@ -79,11 +92,6 @@ public class CssLexer extends Lexer {
                         context.popState();
                     }
                 })
-        );
-
-        addState("basics", new StateBuilder()
-                .rule("\\s+", TokenType.Text)
-                .rule("/\\*(?:.|\n)*?\\*/", TokenType.Comment)
         );
 
         addState("stanza", new StateBuilder()

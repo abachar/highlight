@@ -1,7 +1,7 @@
 package fr.abachar.highlight.lexers;
 
 import fr.abachar.highlight.Context;
-import fr.abachar.highlight.Lexer;
+import fr.abachar.highlight.RegexLexer;
 import fr.abachar.highlight.StateBuilder;
 import fr.abachar.highlight.TokenType;
 import fr.abachar.highlight.rules.RuleCallback;
@@ -9,7 +9,7 @@ import fr.abachar.highlight.rules.RuleCallback;
 /**
  * @author Abdelhakim bachar
  */
-public class JsonLexer extends Lexer {
+public class JsonLexer extends RegexLexer {
 
     /**
      * Build lexer rules

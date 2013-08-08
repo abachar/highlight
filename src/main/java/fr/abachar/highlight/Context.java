@@ -47,7 +47,10 @@ public class Context {
         if (logger.isInfoEnabled()) {
             logger.info("({}) ADD TOKEN [{}:{}] -> [{}]", contextId, peekState(), token.name(), text.replace("\n", "\\n"));
         }
-        tokens.add(new Token(0, token, text));
+
+        if ((text != null) && (text.length() > 0)) {
+            tokens.add(new Token(token, text));
+        }
     }
 
     public String peekState() {

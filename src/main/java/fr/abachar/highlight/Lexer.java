@@ -1,112 +1,46 @@
 package fr.abachar.highlight;
 
-import fr.abachar.highlight.rules.IncludeRule;
-import fr.abachar.highlight.rules.RegexRule;
-import fr.abachar.highlight.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author abachar
  */
 public abstract class Lexer {
 
+    /**
+     *
+     */
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      *
      */
-    private Map<String, State> states;
+    protected String name;
 
     /**
      *
      */
     public Lexer() {
-
-        // Initialize rules
-        initializeRules();
     }
 
     /**
      *
+     * @param input
+     * @return
      */
-    protected abstract void initializeRules();
-
-    protected void addState(String stateName, StateBuilder builder) {
-
-        State state = builder.getState();
-        state.setName(stateName);
-        if (states == null) {
-            states = new HashMap<String, State>();
-        }
-        states.put(stateName, state);
-    }
-
-    protected State resolveState(String name) {
-        return states.get(name);
-    }
-
     public List<Token> getTokens(String input) {
 
+        // Clean input
         input = input.replace("\r\n", "\n").replace("\r", "\n").replace("\t", "    ");
 
-        Context context = new Context();
-        context.setInput(input);
-        context.pushState("root");
-
-        int length = input.length();
-        while (context.getPosition() < length) {
-            if (!step(context, resolveState(context.peekState()))) {
-                break;
-            }
-        }
-
-        return context.getTokens();
-    }
-
-
-    protected boolean step(Context context, State state) {
-        for (Rule rule : state.getRules()) {
-
-            if (rule instanceof IncludeRule) {
-
-                if (step(context, resolveState(((IncludeRule) rule).getStateName()))) {
-                    return true;
-                }
-
-            } else if (rule instanceof RegexRule) {
-
-                if (runRule(context, (RegexRule) rule)) {
-                    return true;
-                }
-
-            }
-        }
-
-        return false;
-    }
-
-    private boolean runRule(Context context, RegexRule rule) {
-
-        Pattern pattern = Pattern.compile(rule.getRegex(), Pattern.MULTILINE | Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(context.getInput());
-        matcher.region(context.getPosition(), context.getInput().length());
-
-        if (matcher.lookingAt()) {
-            // Set matcher
-            context.setMatcher(matcher);
-            rule.getCallback().execute(context);
-            context.setPosition(matcher.end());
-
-            return true;
-        }
-
-        return false;
+        // One text block
+        List<Token> tokens = new ArrayList<Token>();
+        tokens.add(new Token(TokenType.Text, input));
+        return tokens;
     }
 }
