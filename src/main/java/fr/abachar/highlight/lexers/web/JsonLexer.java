@@ -1,4 +1,4 @@
-package fr.abachar.highlight.lexers;
+package fr.abachar.highlight.lexers.web;
 
 import fr.abachar.highlight.Context;
 import fr.abachar.highlight.RegexLexer;

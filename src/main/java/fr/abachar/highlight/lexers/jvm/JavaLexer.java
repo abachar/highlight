@@ -1,9 +1,8 @@
-package fr.abachar.highlight.lexers;
+package fr.abachar.highlight.lexers.jvm;
 
 import fr.abachar.highlight.*;
 import fr.abachar.highlight.rules.RuleCallback;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

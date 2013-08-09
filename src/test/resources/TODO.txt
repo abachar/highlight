@@ -1,59 +1,59 @@
-css
-json
-xml
-------------------
-text < Lexer
++-----------------------------+-----------------------------+
+| TO DO                       | DONE                        |
++-----------------------------+-----------------------------+
+| c                           | css                         |
+| clojure                     | json                        |
+| coffeescript                | xml                         |
+| common_lisp                 | text < Lexer                |
+| conf                        | html                        |
+| cpp                         | java                        |
+| csharp                      | javascript                  |
+| diff                        | sql                         |
+| elixir                      |                             |
+| erb                         |                             |
+| erlang                      |                             |
+| factor                      |                             |
+| gherkin                     |                             |
+| go                          |                             |
+| groovy                      |                             |
+| haml                        |                             |
+| handlebars                  |                             |
+| haskell                     |                             |
+| http                        |                             |
+| ini                         |                             |
+| io                          |                             |
+| literate_coffeescript       |                             |
+| literate_haskell            |                             |
+| llvm                        |                             |
+| lua                         |                             |
+| make                        |                             |
+| markdown                    |                             |
+| nginx                       |                             |
+| perl                        |                             |
+| prolog                      |                             |
+| puppet                      |                             |
+| python                      |                             |
+| r                           |                             |
+| racket                      |                             |
+| ruby                        |                             |
+| rust                        |                             |
+| sass                        |                             |
+| scheme                      |                             |
+| scss                        |                             |
+| sed                         |                             |
+| shell                       |                             |
+| smalltalk                   |                             |
+| tcl                         |                             |
+| tex                         |                             |
+| toml                        |                             |
+| viml                        |                             |
+| yaml                        |                             |
+|                             |                             |
+| php < TemplateLexer         |                             |
++-----------------------------+-----------------------------+
 
-c
-clojure
-coffeescript
-common_lisp
-conf
-cpp
-csharp
-diff
-elixir
-erb
-erlang
-factor
-gherkin
-go
-groovy
-haml
-handlebars
-haskell
-html
-http
-ini
-io
-java
-javascript
-literate_coffeescript
-literate_haskell
-llvm
-lua
-make
-markdown
-nginx
-perl
-prolog
-puppet
-python
-r
-racket
-ruby
-rust
-sass
-scheme
-scss
-sed
-shell
-smalltalk
-sql
-tcl
-tex
-toml
-viml
-yaml
 
-php < TemplateLexer
+
+web : ['PhpLexer', 'ActionScriptLexer', 'XsltLexer', 'ActionScript3Lexer', 'MxmlLexer', 'HaxeLexer', 'HamlLexer', 'SassLexer', 'ScssLexer', 'ObjectiveJLexer', 'CoffeeScriptLexer', 'LiveScriptLexer', 'DuelLexer', 'ScamlLexer', 'JadeLexer', 'XQueryLexer', 'DtdLexer', 'DartLexer', 'LassoLexer', 'QmlLexer', 'TypeScriptLexer']
+jvm : ['ScalaLexer', 'GosuLexer', 'GosuTemplateLexer', 'GroovyLexer', 'IokeLexer', 'ClojureLexer', 'KotlinLexer', 'XtendLexer', 'AspectJLexer', 'CeylonLexer']
+sql : ['PostgresLexer', 'PlPgsqlLexer', 'PostgresConsoleLexer', 'MySqlLexer', 'SqliteConsoleLexer']

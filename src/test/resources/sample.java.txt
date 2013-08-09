@@ -2,7 +2,7 @@ package fr.abachar.highlight.servlet;
 
 import fr.abachar.highlight.HtmlUtils;
 import fr.abachar.highlight.Token;
-import fr.abachar.highlight.lexers.JavaLexer;
+import fr.abachar.highlight.lexers.jvm.JavaLexer;
 import org.apache.commons.io.IOUtils;
 
 import javax.servlet.ServletException;

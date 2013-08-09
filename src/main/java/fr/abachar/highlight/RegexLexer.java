@@ -65,13 +65,27 @@ public abstract class RegexLexer extends Lexer {
         return context.getTokens();
     }
 
-    protected RuleCallback byGroups(final TokenType token1, final TokenType token2) {
+    protected boolean isIn(String text, String list) {
+
+        String[] items = list.split("\\|");
+        for (String item : items) {
+            if (item.equals(text)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected RuleCallback byGroups(final TokenType... types) {
 
         return new RuleCallback() {
             public void execute(Context context) {
                 Matcher m = context.getMatcher();
-                context.addToken(m.group(1), token1);
-                context.addToken(m.group(2), token2);
+                int index = 0;
+                for (TokenType tokenType : types) {
+                    context.addToken(m.group(index), tokenType);
+                    index++;
+                }
             }
         };
     }
@@ -129,7 +143,7 @@ public abstract class RegexLexer extends Lexer {
             } else if (rule instanceof RegexRule) {
 
                 if (logger.isDebugEnabled()) {
-                    String t = context.getInput().substring(context.getPosition(), context.getPosition() + 100);
+                    String t = context.getInput().substring(context.getPosition(), Math.min(context.getPosition() + 100, context.getInput().length()));
                     t = t.replace("\n", "\\n");
                     logger.debug("Test [{}] in state [{}] on text [{}", ((RegexRule) rule).getRegex(), state.getName(), t);
                 }

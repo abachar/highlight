@@ -1,5 +1,6 @@
 package fr.abachar.highlight;
 
+import fr.abachar.highlight.lexers.sql.SqlLexer;
 import fr.abachar.highlight.lexers.web.HtmlLexer;
 import fr.abachar.highlight.lexers.web.JavascriptLexer;
 import org.apache.commons.io.IOUtils;
@@ -18,9 +19,9 @@ public class HighlightTest {
     public void testCSSLexer() throws IOException {
 
         int numLines = 1;
-        String input = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("sample.js.txt"));
+        String input = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("sample.sql.txt"));
         String output = "";
-        Lexer lexer = new JavascriptLexer();
+        Lexer lexer = new SqlLexer();
 
         // Parse
         List<Token> tokens = lexer.getTokens(input);
